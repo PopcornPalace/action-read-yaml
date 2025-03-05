@@ -9,8 +9,8 @@ inputs:
     description: "Config file name"
     required: true
     default: ""
-  key-path:
-    description: "Key path to filter out in the yaml file"
+  key-path-pattern:
+    description: "Regular expression pattern to filter keys"
     required: false
     default: ""
   env-var-prefix:
