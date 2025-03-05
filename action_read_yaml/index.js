@@ -65,18 +65,9 @@ async function main() {
 
     fs.readFile(configData, "utf8", (err, data) => {
       if (err) {
-        console.error(err);
+        core.setFailed(err.message);
         return;
       }
-
-      if ( keyPathPattern )
-      {
-         core.info(`\n\nkey-path-pattern is :: ${keyPathPattern}`);
-         core.info("\n\n");
-      }
-
-
-      console.log("Read data:\n", data);
 
       const SCHEMA = yaml.FAILSAFE_SCHEMA;
       const configYaml = yaml.load(data, { schema: SCHEMA });
@@ -108,24 +99,20 @@ async function main() {
             if(key.match(reKPP))
             {
                 var k=key.replace(reKPP,'');
-                core.info(`${k} : ${value}`);
                 core.setOutput(k,value);
                 if ( envVarPrefix )
                 {
                     k=k.replace(reEnvVarPattern,"_");
-                    core.info(`${envVarPrefix}_${k}=${value}`);
                     core.exportVariable(`${envVarPrefix}_${k}`,value);
                 }
             }
         }
         else
         {
-            core.info(`${key} : ${value}`);
             core.setOutput(key,value);
             if ( envVarPrefix )
             {
                 k=key.replace(reEnvVarPattern,"_");
-                core.info(`${envVarPrefix}_${k}=${value}`);
                 core.exportVariable(`${envVarPrefix}_${k}`,value);
             }
         }
